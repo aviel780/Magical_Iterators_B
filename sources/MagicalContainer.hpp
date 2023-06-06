@@ -35,13 +35,14 @@ namespace ariel {
         PrimeIterator primeEnd() const;
 
         MagicalContainer& operator=(const MagicalContainer& other);
+        
 
 
     private:
-        std::vector<int> container;
+        std::vector<int> vector_container;
 
         // Check if a number is prime
-        bool isPrime(int number) const;
+        
     };
 
     // Ascending Iterator
@@ -71,10 +72,9 @@ namespace ariel {
         bool operator>(const AscendingIterator& other) const;
 
         AscendingIterator& operator=(const AscendingIterator& other);
-       
         
-      
 
+       
     private:
         const MagicalContainer& container;
         size_t index;
@@ -111,9 +111,21 @@ namespace ariel {
     // Prime Iterator
     class MagicalContainer::PrimeIterator {
     public:
-        PrimeIterator(const MagicalContainer& container, size_t index);
-         PrimeIterator(const MagicalContainer& container);
-
+    // Prime Iterator constructor
+    PrimeIterator(const ariel::MagicalContainer &container)
+    : container(container), index(0) {
+    // Initialize the iterator at the beginning of the container
+    while (index < container.size() && !isPrime(container.vector_container[index])) {
+        ++index;
+    }
+}
+        PrimeIterator(const PrimeIterator& prim_container, size_t index);
+        PrimeIterator(const PrimeIterator& prim_container);
+        ~PrimeIterator();
+        // PrimeIterator(const MagicalContainer& container);
+        PrimeIterator(MagicalContainer &cont, size_t index);
+        
+        
         int operator*() const;
         PrimeIterator& operator++();
         bool operator==(const PrimeIterator& other) const;
@@ -124,16 +136,11 @@ namespace ariel {
 
         PrimeIterator& operator=(const PrimeIterator& other);
 
-        PrimeIterator begin() const{
-                        return PrimeIterator(container);
-                    }
+        PrimeIterator begin() const;
 
-                    // Return an iterator that point to the end of the container (one past the last element)
-                    PrimeIterator end() const{
-                        PrimeIterator iterator_end(container);
-                        iterator_end.index = container.size();
-                        return iterator_end;
-                    }
+        // Return an iterator that point to the end of the container (one past the last element)
+        PrimeIterator end() const;
+        bool isPrime(int number) const;
 
     private:
         const MagicalContainer& container;

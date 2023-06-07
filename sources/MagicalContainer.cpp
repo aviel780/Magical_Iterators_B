@@ -109,27 +109,45 @@ MagicalContainer::AscendingIterator MagicalContainer::ascendingEnd() const {
     return *this;
 }
 // Side Cross Iterator
+MagicalContainer::SideCrossIterator::SideCrossIterator(const MagicalContainer& container, size_t index, bool flag)
+    : container(container), index(index), flag(flag) {
+}
+
+MagicalContainer::SideCrossIterator::SideCrossIterator( // this
+    const SideCrossIterator &other) 
+    : container(other.container), index(other.index),
+      flag(other.flag) {}
+
+
+MagicalContainer::SideCrossIterator::~SideCrossIterator() {}
+
+
 
 MagicalContainer::SideCrossIterator::SideCrossIterator(const MagicalContainer& container)
         : container(container),index(0) {
         }
 
 MagicalContainer::SideCrossIterator &
-MagicalContainer::SideCrossIterator::operator=(const MagicalContainer::SideCrossIterator &other) {
+MagicalContainer::SideCrossIterator::operator=(const MagicalContainer::SideCrossIterator &other) {  // this
     if (&container != &other.container) throw std::runtime_error("The iterators are points at different containers");
     index = other.index;
     return *this;
 }
-        
+
+
 MagicalContainer::SideCrossIterator  MagicalContainer::SideCrossIterator::begin() const {
-       SideCrossIterator beginIter(container);
+       SideCrossIterator beginIter (container, 0, false);
     return beginIter;
     }
-    MagicalContainer::SideCrossIterator MagicalContainer::SideCrossIterator::end() const {
-       SideCrossIterator endIter(container);
-    endIter.index = container.size();
-    return endIter;
-    }
+    MagicalContainer::SideCrossIterator MagicalContainer::SideCrossIterator::end() const { // this
+  if (container.vector_container.size() % 2 == 0) {
+    return SideCrossIterator(container, (container.vector_container.size() / 2),
+                             false);
+  } else {
+    return SideCrossIterator(
+        container, ((container.vector_container.size() / 2)), true);
+  }
+}
 
     bool MagicalContainer::SideCrossIterator::operator<(const SideCrossIterator& other) const {
     return this->container.size() < other.container.size();
@@ -140,18 +158,28 @@ MagicalContainer::SideCrossIterator  MagicalContainer::SideCrossIterator::begin(
         return this->container.size() > other.container.size();
     }
 
-    MagicalContainer::SideCrossIterator::SideCrossIterator(const MagicalContainer& container, size_t index)
-        : container(container), index(index) {
-        }
+    
 
     int MagicalContainer::SideCrossIterator::operator*() const {
         return container.vector_container[index];
     }
 
-    MagicalContainer::SideCrossIterator& MagicalContainer::SideCrossIterator::operator++() {
-        index += 2;
-        return *this;
-    }
+    MagicalContainer::SideCrossIterator& MagicalContainer::SideCrossIterator::operator++() { // this
+  if (index >= (container.vector_container.size()/2)+1) {
+    throw std::runtime_error("Iterator out of range");
+  }
+
+  if (flag) {
+    ++index;
+  }
+
+  flag = !flag;
+  if (index >= (container.vector_container.size()/2)+1) {
+    throw std::runtime_error("Iterator out of range");
+  }
+  return *this;
+}
+
 
 
     bool MagicalContainer::SideCrossIterator::operator==(const SideCrossIterator& other) const {

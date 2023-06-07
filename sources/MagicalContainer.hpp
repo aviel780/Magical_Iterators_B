@@ -83,8 +83,12 @@ namespace ariel {
     // Side Cross Iterator
     class MagicalContainer::SideCrossIterator {
     public:
-        SideCrossIterator(const MagicalContainer& container, size_t index);
+        
         SideCrossIterator(const MagicalContainer& container);
+        SideCrossIterator(const MagicalContainer &cont, size_t index, bool flag = false);
+        SideCrossIterator(const MagicalContainer& container, size_t index) noexcept;
+        SideCrossIterator(const SideCrossIterator &other);
+
 
         int operator*() const;
         SideCrossIterator& operator++();
@@ -96,16 +100,18 @@ namespace ariel {
 
          SideCrossIterator begin() const;
         
-                
-
                     // Return an iterator that point to the end of the container (one past the last element)
         SideCrossIterator end() const;
 
         SideCrossIterator& operator=(const SideCrossIterator& other);
 
+        ~SideCrossIterator();
+
     private:
         const MagicalContainer& container;
+        const MagicalContainer* myContainer;
         size_t index;
+        bool flag;
     };
 
     // Prime Iterator

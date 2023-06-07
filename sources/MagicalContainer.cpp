@@ -5,6 +5,7 @@
 namespace ariel {
 
 //magical continer
+
     void MagicalContainer::addElement(int element){
                 for(size_t i = 0; i<vector_container.size();i++){
                     if(vector_container[i] == element){
@@ -22,6 +23,9 @@ namespace ariel {
         if (it != vector_container.end()) {
             vector_container.erase(it);
         }
+        if(it == vector_container.end()){
+            throw std::runtime_error("the elemnt dosnet exsist");}         
+        
     }
 
     size_t MagicalContainer::size() const {
@@ -123,8 +127,8 @@ MagicalContainer::SideCrossIterator::~SideCrossIterator() {}
 
 
 
-MagicalContainer::SideCrossIterator::SideCrossIterator(const MagicalContainer& container)
-        : container(container),index(0) {
+MagicalContainer::SideCrossIterator::SideCrossIterator(const MagicalContainer& ma_container)
+        : container(ma_container),index(0),flag(false) {
         }
 
 MagicalContainer::SideCrossIterator &
@@ -139,29 +143,31 @@ MagicalContainer::SideCrossIterator  MagicalContainer::SideCrossIterator::begin(
        SideCrossIterator beginIter (container, 0, false);
     return beginIter;
     }
-    MagicalContainer::SideCrossIterator MagicalContainer::SideCrossIterator::end() const { // this
-  if (container.vector_container.size() % 2 == 0) {
-    return SideCrossIterator(container, (container.vector_container.size() / 2),
-                             false);
-  } else {
-    return SideCrossIterator(
-        container, ((container.vector_container.size() / 2)), true);
-  }
+    MagicalContainer::SideCrossIterator MagicalContainer::SideCrossIterator::end() const { 
+    size_t endIndex = container.vector_container.size() / 2;
+    bool isEndOdd = container.vector_container.size() % 2 != 0;
+    return SideCrossIterator(container, endIndex, isEndOdd);
 }
 
-    bool MagicalContainer::SideCrossIterator::operator<(const SideCrossIterator& other) const {
-    return this->container.size() < other.container.size();
+    bool MagicalContainer::SideCrossIterator::operator<(const SideCrossIterator& other) const { // this
+    return (*this).operator*() <  (other).operator*();
     }
     
 
-    bool MagicalContainer::SideCrossIterator::operator>(const SideCrossIterator& other) const {
-        return this->container.size() > other.container.size();
+    bool MagicalContainer::SideCrossIterator::operator>(const SideCrossIterator& other) const { // this
+        
+           return (*this).operator*() > (other).operator*();
     }
 
     
 
-    int MagicalContainer::SideCrossIterator::operator*() const {
-        return container.vector_container[index];
+    int MagicalContainer::SideCrossIterator::operator*() const { // this
+        if (flag)
+    return container
+        .vector_container[(unsigned long)container.size() - index - 1];
+  else
+    return container.vector_container[index];
+
     }
 
     MagicalContainer::SideCrossIterator& MagicalContainer::SideCrossIterator::operator++() { // this
@@ -182,24 +188,14 @@ MagicalContainer::SideCrossIterator  MagicalContainer::SideCrossIterator::begin(
 
 
 
-    bool MagicalContainer::SideCrossIterator::operator==(const SideCrossIterator& other) const {
-        return index == other.index;
+    bool MagicalContainer::SideCrossIterator::operator==(const SideCrossIterator& other) const {//this
+        return index == other.index && flag == other.flag ;
     }
 
-    bool MagicalContainer::SideCrossIterator::operator!=(const SideCrossIterator& other) const {
-        return index != other.index;
-    }
-
-//     MagicalContainer::SideCrossIterator& MagicalContainer::SideCrossIterator::operator=(const SideCrossIterator& other) {
-//     if (this == &other) {
-//         return *this;
-//     }
-
-//     // Throw an exception to indicate that the assignment is not supported
-//     throw std::runtime_error("Assignment operator is not supported for MagicalContainer");
-
-//     return *this;
-// }
+    bool MagicalContainer::SideCrossIterator::operator!=(const SideCrossIterator& other) const {//this
+         return !(*this == other);
+}
+    
 
     // Prime Iterator
     MagicalContainer::PrimeIterator::PrimeIterator(const PrimeIterator& prm_container)

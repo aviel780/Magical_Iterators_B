@@ -83,29 +83,28 @@ namespace ariel {
     // Side Cross Iterator
     class MagicalContainer::SideCrossIterator {
     public:
-        
+        //counstrctir&dstructor
         SideCrossIterator(const MagicalContainer& container);
         SideCrossIterator(const MagicalContainer &cont, size_t index, bool flag = false);
         SideCrossIterator(const MagicalContainer& container, size_t index) noexcept;
         SideCrossIterator(const SideCrossIterator &other);
+        ~SideCrossIterator();
 
-
+        // opertors
         int operator*() const;
         SideCrossIterator& operator++();
         bool operator==(const SideCrossIterator& other) const;
         bool operator!=(const SideCrossIterator& other) const;
-
         bool operator<(const SideCrossIterator& other) const;
         bool operator>(const SideCrossIterator& other) const;
 
-         SideCrossIterator begin() const;
-        
-                    // Return an iterator that point to the end of the container (one past the last element)
+        //begin&END
+        SideCrossIterator begin() const; 
         SideCrossIterator end() const;
-
+        //sigment
         SideCrossIterator& operator=(const SideCrossIterator& other);
 
-        ~SideCrossIterator();
+        
 
     private:
         const MagicalContainer& container;
@@ -117,7 +116,8 @@ namespace ariel {
     // Prime Iterator
     class MagicalContainer::PrimeIterator {
     public:
-    // Prime Iterator constructor
+
+    // counstrctor& dstrctor
     PrimeIterator(const ariel::MagicalContainer &container)
     : container(container), index(0) {
     // Initialize the iterator at the beginning of the container
@@ -125,28 +125,28 @@ namespace ariel {
         ++index;
     }
 }
-        PrimeIterator(const PrimeIterator& prim_container, size_t index);
-        PrimeIterator(const PrimeIterator& prim_container);
-        ~PrimeIterator();
-        // PrimeIterator(const MagicalContainer& container);
-        PrimeIterator(MagicalContainer &cont, size_t index);
+    PrimeIterator(MagicalContainer &cont, size_t index);
+    PrimeIterator(const PrimeIterator& prim_container, size_t index);
+    PrimeIterator(const PrimeIterator& prim_container);
+    ~PrimeIterator();
         
-        
-        int operator*() const;
-        PrimeIterator& operator++();
-        bool operator==(const PrimeIterator& other) const;
-        bool operator!=(const PrimeIterator& other) const;
+    //opertors
+    int operator*() const;
+    PrimeIterator& operator++();
+    bool operator==(const PrimeIterator& other) const;
+    bool operator!=(const PrimeIterator& other) const;
+    bool operator<(const PrimeIterator& other) const;
+    bool operator>(const PrimeIterator& other) const;
 
-        bool operator<(const PrimeIterator& other) const;
-        bool operator>(const PrimeIterator& other) const;
+    //asigment
+    PrimeIterator& operator=(const PrimeIterator& other);
 
-        PrimeIterator& operator=(const PrimeIterator& other);
+    //begind& end
+    PrimeIterator begin() const;
+    PrimeIterator end() const;
 
-        PrimeIterator begin() const;
-
-        // Return an iterator that point to the end of the container (one past the last element)
-        PrimeIterator end() const;
-        bool isPrime(int number) const;
+    //chak if its prime number
+    bool isPrime(int number) const;
 
     private:
         const MagicalContainer& container;
